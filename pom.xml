@@ -11,8 +11,8 @@
     <groupId>co.edu.unimagdalena.libros</groupId>
     <artifactId>Libros</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Libros</name>
-    <description>Libros</description>
+    <name>Books</name>
+    <description>Books</description>
     <url/>
     <licenses>
         <license/>
