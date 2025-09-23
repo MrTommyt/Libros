@@ -1,41 +1,28 @@
-package co.edu.unimagdalena.libros.libros.entity;
+package co.edu.unimagdalena.libros.libros.Dto;
 
-import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
 @Getter
 @Setter
-@Entity
-@NoArgsConstructor
-@Table(name = "libros")
-public class Libro {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class BookDto {
     private UUID id;
-
-    @Column(nullable = false)
     private String titulo;
-
-    @Column(nullable = false)
     private String autor;
-
-    @Column(nullable = false)
     private String editorial;
-
-    @Column(nullable = false)
     private String isbn;
 
-    public Libro(UUID id, String titulo, String autor, String editorial, String isbn) {
+    public BookDto(UUID id, String titulo, String autor, String editorial, String isbn) {
         this.id = id;
         this.titulo = titulo;
         this.autor = autor;
         this.editorial = editorial;
         this.isbn = isbn;
+    }
+
+    public BookDto() {
     }
 
 //    public UUID getId() {
@@ -80,7 +67,7 @@ public class Libro {
 
     @Override
     public String toString() {
-        return "Libro{" +
+        return "LibroDto{" +
                 "id=" + id +
                 ", titulo='" + titulo + '\'' +
                 ", autor='" + autor + '\'' +
