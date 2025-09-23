@@ -1,0 +1,36 @@
+networks:
+  global-network:
+  app-network:
+    driver: bridge
+
+services:
+  app-server:
+    container_name: app
+    networks:
+      - app-network
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://app-postgres:5432/appdb
+      SPRING_DATASOURCE_USERNAME: user
+      SPRING_DATASOURCE_PASSWORD: pwd1
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - app-postgres
+    ports:
+      - '8080:8080'
+
+  app-postgres:
+    image: postgres:15-alpine
+    container_name: app_postgres_db
+    networks:
+      - app-network
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pwd1
+      POSTGRES_DB: appdb
+    volumes:
+      - app_pgdata:/var/lib/postgresql/data
+volumes:
+  app_pgdata:
