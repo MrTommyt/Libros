@@ -9,22 +9,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface LibroMapper {
     LibroDto toDto(Libro libro);
     Libro toEntity(LibroDto libroDto);
-
-    LibroMapper INSTANCE = Mappers.getMapper(LibroMapper.class);
-
-    @Mappings({
-            @Mapping(source = "id", target = "id"),
-            @Mapping(source = "titulo", target = "titulo"),
-            @Mapping(source = "autor", target = "autor"),
-            @Mapping(source = "editorial", target = "editorial"),
-            @Mapping(source = "isbn", target = "isbn")
-    })
-    LibroDto toLibroDto(Libro libro);
-
-    @InheritInverseConfiguration
-    Libro toLibro(LibroDto libroDto);
 }
