@@ -1,6 +1,7 @@
 package co.edu.unimagdalena.libros.libros.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @NoArgsConstructor
+@Data
 @Table(name = "libros")
 public class Book {
 
@@ -19,10 +21,10 @@ public class Book {
     private UUID id;
 
     @Column(nullable = false)
-    private String titulo;
+    private String title;
 
     @Column(nullable = false)
-    private String autor;
+    private String author;
 
     @Column(nullable = false)
     private String editorial;
@@ -32,8 +34,8 @@ public class Book {
 
     public Book(UUID id, String titulo, String autor, String editorial, String isbn) {
         this.id = id;
-        this.titulo = titulo;
-        this.autor = autor;
+        this.title = titulo;
+        this.author = autor;
         this.editorial = editorial;
         this.isbn = isbn;
     }
@@ -82,8 +84,8 @@ public class Book {
     public String toString() {
         return "Libro{" +
                 "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", autor='" + autor + '\'' +
+                ", titulo='" + title + '\'' +
+                ", autor='" + author + '\'' +
                 ", editorial='" + editorial + '\'' +
                 ", isbn='" + isbn + '\'' +
                 '}';

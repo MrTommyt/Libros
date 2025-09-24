@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface BookRepository extends JpaRepository<Book, UUID> {
-    @Override
-    List<Book> findAll();
 
-    @Override
-    Optional<Book> findById(UUID id);
+public interface BookRepository extends JpaRepository<Book, UUID> {
+    Optional<Book> findByTitle(String title);
+    List<Book> findByAuthor(String author);
+    List<Book> findByTitleContains(String title);
+
+
+
 }

@@ -1,5 +1,10 @@
 package co.edu.unimagdalena.libros.libros.Dto;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,16 +13,20 @@ import java.util.UUID;
 @Getter
 @Setter
 public class BookDto {
+
+    @NotNull
     private UUID id;
-    private String titulo;
-    private String autor;
+
+    @NotBlank(message = "El titulo no puede estar vacio")
+    private String title;
+    private String author;
     private String editorial;
     private String isbn;
 
     public BookDto(UUID id, String titulo, String autor, String editorial, String isbn) {
         this.id = id;
-        this.titulo = titulo;
-        this.autor = autor;
+        this.title = titulo;
+        this.author = autor;
         this.editorial = editorial;
         this.isbn = isbn;
     }
@@ -69,8 +78,8 @@ public class BookDto {
     public String toString() {
         return "LibroDto{" +
                 "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", autor='" + autor + '\'' +
+                ", titulo='" + title + '\'' +
+                ", autor='" + author + '\'' +
                 ", editorial='" + editorial + '\'' +
                 ", isbn='" + isbn + '\'' +
                 '}';
