@@ -1,14 +1,17 @@
 package co.edu.unimagdalena.libros.libros.service;
 
 import co.edu.unimagdalena.libros.libros.Dto.BookDto;
+import co.edu.unimagdalena.libros.libros.entity.Book;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 public interface BookService {
-    Optional<BookDto> findAll();
-    List<BookDto> save(BookDto bookDto);
-    List<BookDto> update(UUID id, BookDto newBookDto);
-    void delete(BookDto bookDto);
+
+    BookDto getBookByTitle(String title);
+    List<BookDto> getBooksByAuthor(String author);
+    List<BookDto> getBooksByTitleContaining(String title);
+    BookDto createBook(BookDto bookDto);
+    List<BookDto> getAllBooks();
 }
