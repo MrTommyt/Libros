@@ -2,7 +2,6 @@ package co.edu.unimagdalena.libros.libros.service.imp;
 
 import co.edu.unimagdalena.libros.libros.dto.BookDefinitionDto;
 import co.edu.unimagdalena.libros.libros.entity.BookDefinition;
-import co.edu.unimagdalena.libros.libros.exeption.BookNotFoundExeption;
 import co.edu.unimagdalena.libros.libros.mapper.BookDefinitionMapper;
 import co.edu.unimagdalena.libros.libros.repository.BookDefinitionRepository;
 import co.edu.unimagdalena.libros.libros.service.BookDefinitionService;
@@ -10,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -29,33 +30,45 @@ public class BookDefinitionServiceImp implements BookDefinitionService {
     }
 
     @Override
-    public BookDefinitionDto getBookByTitle(String title) {
+    public BookDefinitionDto updateBook(BookDefinitionDto bookDefinitionDto) {
+        return bookDefinitionMapper.toDto(bookDefinitionRepository.save(bookDefinitionMapper.toEntity(bookDefinitionDto)));
+    }
+
+    @Override
+    public void deleteBookById(UUID id) {
+        bookDefinitionRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<BookDefinitionDto> getBookByTitle(String title) {
         return bookDefinitionRepository.findByTitle(title).
-                map(bookDefinitionMapper::toDto).
-                orElseThrow(() -> new BookNotFoundExeption("Book not found by title:" + title));
+                map(bookDefinitionMapper::toDto);
     }
 
     @Override
     public List<BookDefinitionDto> getBooksByAuthor(String author) {
-
         List<BookDefinition> bookDefinitions = bookDefinitionRepository.findByAuthor(author);
-        if (bookDefinitions.isEmpty()) {
-            throw new BookNotFoundExeption("Book not found by author:" + author);
-        }
-        return bookDefinitions.stream().
-                map(bookDefinitionMapper::toDto).
-                toList();
+        return bookDefinitions.stream()
+            .map(bookDefinitionMapper::toDto)
+            .toList();
     }
 
     @Override
     public List<BookDefinitionDto> getBooksByTitleContaining(String title) {
         List<BookDefinition> bookDefinitionWithTitle = bookDefinitionRepository.findByTitleContains(title);
-        if(bookDefinitionWithTitle.isEmpty()) {
-            throw new BookNotFoundExeption("Books not found by title:" + title);
-        }
-        return bookDefinitionWithTitle.
-                stream().
-                map(bookDefinitionMapper::toDto).
-                toList();
+        return bookDefinitionWithTitle
+            .stream()
+            .map(bookDefinitionMapper::toDto)
+            .toList();
+    }
+
+    @Override
+    public Optional<BookDefinitionDto> getBookByIsbn(String isbn) {
+        return bookDefinitionRepository.findByIsbn(isbn).map(bookDefinitionMapper::toDto);
+    }
+
+    @Override
+    public Optional<BookDefinitionDto> getBookById(UUID id) {
+        return bookDefinitionRepository.findById(id).map(bookDefinitionMapper::toDto);
     }
 }
