@@ -1,10 +1,8 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 
-import co.edu.unimagdalena.libros.libros.Dto.BookDto;
-import co.edu.unimagdalena.libros.libros.entity.Book;
-import co.edu.unimagdalena.libros.libros.repository.BookRepository;
-import co.edu.unimagdalena.libros.libros.service.BookService;
+import co.edu.unimagdalena.libros.libros.Dto.BookDefinitionDto;
+import co.edu.unimagdalena.libros.libros.service.BookDefinitionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,25 +12,25 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/Books")
+@RequestMapping("/api/v1/books")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
-    private final BookService bookService;
+    private final BookDefinitionService bookDefinitionService;
 
 
     @GetMapping()
-    public ResponseEntity<List<BookDto>> getAllBooks(){
-        return ResponseEntity.ok(bookService.getAllBooks());
+    public ResponseEntity<List<BookDefinitionDto>> getAllBooks(){
+        return ResponseEntity.ok(bookDefinitionService.getAllBooks());
     }
 
-    @GetMapping("/titulo/{titulo}")
-    public ResponseEntity<BookDto> getBookByTitle(@PathVariable String titulo){
-        return  ResponseEntity.ok(bookService.getBookByTitle(titulo));
+    @GetMapping("/title/{title}")
+    public ResponseEntity<BookDefinitionDto> getBookByTitle(@PathVariable String title){
+        return  ResponseEntity.ok(bookDefinitionService.getBookByTitle(title));
     }
 
     @PostMapping()
-    public ResponseEntity<BookDto> createBook(@Valid @RequestBody BookDto bookDto){
-        return ResponseEntity.ok(bookService.createBook(bookDto));
+    public ResponseEntity<BookDefinitionDto> createBook(@Valid @RequestBody BookDefinitionDto bookDefinitionDto){
+        return ResponseEntity.ok(bookDefinitionService.createBook(bookDefinitionDto));
     }
 
 }
