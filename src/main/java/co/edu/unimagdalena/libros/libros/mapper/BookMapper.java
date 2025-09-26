@@ -1,11 +1,11 @@
 package co.edu.unimagdalena.libros.libros.mapper;
 
-import co.edu.unimagdalena.libros.libros.Dto.BookDto;
-import co.edu.unimagdalena.libros.libros.entity.Book;
+import co.edu.unimagdalena.libros.libros.Dto.BookDefinitionDto;
+import co.edu.unimagdalena.libros.libros.entity.BookDefinition;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    BookDto toDto(Book book);
-    Book toEntity(BookDto bookDto);
+    BookDefinitionDto toDto(BookDefinition bookDefinition);
+    BookDefinition toEntity(BookDefinitionDto bookDefinitionDto);
 }

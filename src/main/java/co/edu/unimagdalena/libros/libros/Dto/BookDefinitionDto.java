@@ -1,18 +1,17 @@
 package co.edu.unimagdalena.libros.libros.Dto;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
-@Getter
-@Setter
-public class BookDto {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class BookDefinitionDto {
 
     @NotNull
     private UUID id;
@@ -23,16 +22,7 @@ public class BookDto {
     private String editorial;
     private String isbn;
 
-    public BookDto(UUID id, String titulo, String autor, String editorial, String isbn) {
-        this.id = id;
-        this.title = titulo;
-        this.author = autor;
-        this.editorial = editorial;
-        this.isbn = isbn;
-    }
 
-    public BookDto() {
-    }
 
 //    public UUID getId() {
 //        return id;

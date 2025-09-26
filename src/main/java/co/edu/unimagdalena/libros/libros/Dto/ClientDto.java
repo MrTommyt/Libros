@@ -1,24 +1,24 @@
-package co.edu.unimagdalena.libros.libros.entity;
+package co.edu.unimagdalena.libros.libros.Dto;
 
-import jakarta.persistence.*;
+import co.edu.unimagdalena.libros.libros.entity.BookDefinition;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
-@ToString
-@Entity
-@Table
-@AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+@AllArgsConstructor
+
+public class ClientDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,6 +37,8 @@ public class Client {
     @NotNull(message = "la contraseña es obligatoria")
     private String password;
 
+    @NotNull(message = "campo obligatorio")
+    private List<BookDefinition> bookDefinitions;
 
     @Override
     public String toString() {
@@ -47,6 +49,4 @@ public class Client {
                 ", email='" + email + '\'' +
                 '}';
     }
-
 }
-
