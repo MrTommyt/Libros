@@ -14,9 +14,17 @@ import java.util.UUID;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false)
     private String state;
+
+    @ManyToOne
+    @JoinColumn(name = "book_definition_id")
+    private BookDefinition bookDefinition;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
 }

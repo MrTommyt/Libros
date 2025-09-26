@@ -9,10 +9,8 @@ import java.util.UUID;
 
 
 public interface BookDefinitionRepository extends JpaRepository<BookDefinition, UUID> {
+    Optional<BookDefinition> findByIsbn(String isbn);
     Optional<BookDefinition> findByTitle(String title);
     List<BookDefinition> findByAuthor(String author);
     List<BookDefinition> findByTitleContains(String title);
-
-
-
 }

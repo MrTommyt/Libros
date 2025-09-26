@@ -26,7 +26,7 @@ public class BookDefinition {
     @Column(nullable = false)
     private String editorial;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String isbn;
 
     @Override
