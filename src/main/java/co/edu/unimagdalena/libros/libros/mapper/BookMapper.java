@@ -1,6 +1,6 @@
 package co.edu.unimagdalena.libros.libros.mapper;
 
-import co.edu.unimagdalena.libros.libros.Dto.BookDefinitionDto;
+import co.edu.unimagdalena.libros.libros.dto.BookDefinitionDto;
 import co.edu.unimagdalena.libros.libros.entity.BookDefinition;
 import org.mapstruct.Mapper;
 

@@ -1,6 +1,6 @@
 package co.edu.unimagdalena.libros.libros.service;
 
-import co.edu.unimagdalena.libros.libros.Dto.BookDefinitionDto;
+import co.edu.unimagdalena.libros.libros.dto.BookDefinitionDto;
 
 import java.util.List;
 

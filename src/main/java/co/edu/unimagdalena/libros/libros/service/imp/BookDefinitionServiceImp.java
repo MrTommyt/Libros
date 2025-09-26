@@ -1,6 +1,6 @@
 package co.edu.unimagdalena.libros.libros.service.imp;
 
-import co.edu.unimagdalena.libros.libros.Dto.BookDefinitionDto;
+import co.edu.unimagdalena.libros.libros.dto.BookDefinitionDto;
 import co.edu.unimagdalena.libros.libros.entity.BookDefinition;
 import co.edu.unimagdalena.libros.libros.exeption.BookNotFoundExeption;
 import co.edu.unimagdalena.libros.libros.mapper.BookMapper;

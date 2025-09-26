@@ -1,6 +1,5 @@
-package co.edu.unimagdalena.libros.libros.Dto;
+package co.edu.unimagdalena.libros.libros.dto;
 
-import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

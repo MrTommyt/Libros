@@ -1,4 +1,4 @@
-package co.edu.unimagdalena.libros.libros.Dto;
+package co.edu.unimagdalena.libros.libros.dto;
 
 import co.edu.unimagdalena.libros.libros.entity.BookDefinition;
 import jakarta.persistence.GeneratedValue;

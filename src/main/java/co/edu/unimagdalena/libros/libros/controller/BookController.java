@@ -1,7 +1,7 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 
-import co.edu.unimagdalena.libros.libros.Dto.BookDefinitionDto;
+import co.edu.unimagdalena.libros.libros.dto.BookDefinitionDto;
 import co.edu.unimagdalena.libros.libros.service.BookDefinitionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
