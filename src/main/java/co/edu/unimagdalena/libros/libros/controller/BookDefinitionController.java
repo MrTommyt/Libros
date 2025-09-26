@@ -4,11 +4,13 @@ package co.edu.unimagdalena.libros.libros.controller;
 import co.edu.unimagdalena.libros.libros.dto.BookDefinitionDto;
 import co.edu.unimagdalena.libros.libros.service.BookDefinitionService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,16 +24,31 @@ public class BookDefinitionController {
         return ResponseEntity.ok(bookDefinitionService.getAllBooks());
     }
 
-    @GetMapping("/title/{title}")
-    public ResponseEntity<BookDefinitionDto> getBookByTitle(@PathVariable String title){
-        return bookDefinitionService.getBookByTitle(title)
+    @GetMapping("/")
+    public ResponseEntity<List<BookDefinitionDto>> getBooks(
+        @PathParam("title") String title,
+        @PathParam("author") String author,
+        @PathParam("editorial") String editorial
+    ){
+        return ResponseEntity.ok(bookDefinitionService.getByTitleAuthorIsbn(author, title, editorial));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookDefinitionDto> getBookById(@PathVariable("id") UUID id){
+        return bookDefinitionService.getBookById(id)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/author/{author}")
-    public ResponseEntity<List<BookDefinitionDto>> getBooksByAuthor(@PathVariable String author){
-        return ResponseEntity.ok(bookDefinitionService.getBooksByAuthor(author));
+    @PutMapping("/")
+    public ResponseEntity<BookDefinitionDto> updateBook(@Valid @RequestBody BookDefinitionDto bookDefinitionDto){
+        return ResponseEntity.ok(bookDefinitionService.updateBook(bookDefinitionDto));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBookById(@PathVariable("id") UUID id){
+        bookDefinitionService.deleteBookById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping()

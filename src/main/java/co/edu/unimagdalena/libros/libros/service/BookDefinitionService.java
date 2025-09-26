@@ -9,10 +9,20 @@ import java.util.UUID;
 
 public interface BookDefinitionService {
 
-    Optional<BookDefinitionDto> getBookByTitle(String title);
-    List<BookDefinitionDto> getBooksByAuthor(String author);
-    List<BookDefinitionDto> getBooksByTitleContaining(String title);
-    Optional<BookDefinitionDto> getBookByIsbn(String isbn);
+    List<BookDefinitionDto> getByTitleAuthorIsbn(String author, String title, String isbn);
+
+    default Optional<BookDefinitionDto> getBookByIsbn(String isbn) {
+        return getByTitleAuthorIsbn(null, null, isbn).stream().findFirst();
+    }
+    default Optional<BookDefinitionDto> getBookByTitle(String title) {
+        return getByTitleAuthorIsbn(null, title, null).stream().findFirst();
+    }
+    default List<BookDefinitionDto> getBooksByAuthor(String author) {
+        return getByTitleAuthorIsbn(author, null, null);
+    }
+    default List<BookDefinitionDto> getBooksByTitleContaining(String title) {
+        return getByTitleAuthorIsbn(null, "%" + title + "%", null);
+    }
 
     Optional<BookDefinitionDto> getBookById(UUID id);
     BookDefinitionDto createBook(BookDefinitionDto bookDefinitionDto);

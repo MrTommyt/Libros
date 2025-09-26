@@ -24,6 +24,26 @@ public class BookDefinitionServiceImp implements BookDefinitionService {
     }
 
     @Override
+    public List<BookDefinitionDto> getByTitleAuthorIsbn(String author, String title, String editorial) {
+        if (author == null) {
+            author = "%";
+        }
+        if (title == null) {
+            title = "%";
+        }
+        if (editorial == null) {
+            editorial = "%";
+        }
+        List<BookDefinition> bookDefinitions = bookDefinitionRepository.findByTitleAuthorEditorial(author, title, editorial);
+        return bookDefinitions.stream().map(bookDefinitionMapper::toDto).toList();
+    }
+
+    @Override
+    public Optional<BookDefinitionDto> getBookById(UUID id) {
+        return bookDefinitionRepository.findById(id).map(bookDefinitionMapper::toDto);
+    }
+
+    @Override
     public BookDefinitionDto createBook(BookDefinitionDto bookDefinitionDto){
         BookDefinition bookDefinition = bookDefinitionMapper.toEntity(bookDefinitionDto);
         return bookDefinitionMapper.toDto(bookDefinitionRepository.save(bookDefinition));
@@ -37,38 +57,5 @@ public class BookDefinitionServiceImp implements BookDefinitionService {
     @Override
     public void deleteBookById(UUID id) {
         bookDefinitionRepository.deleteById(id);
-    }
-
-    @Override
-    public Optional<BookDefinitionDto> getBookByTitle(String title) {
-        return bookDefinitionRepository.findByTitle(title).
-                map(bookDefinitionMapper::toDto);
-    }
-
-    @Override
-    public List<BookDefinitionDto> getBooksByAuthor(String author) {
-        List<BookDefinition> bookDefinitions = bookDefinitionRepository.findByAuthor(author);
-        return bookDefinitions.stream()
-            .map(bookDefinitionMapper::toDto)
-            .toList();
-    }
-
-    @Override
-    public List<BookDefinitionDto> getBooksByTitleContaining(String title) {
-        List<BookDefinition> bookDefinitionWithTitle = bookDefinitionRepository.findByTitleContains(title);
-        return bookDefinitionWithTitle
-            .stream()
-            .map(bookDefinitionMapper::toDto)
-            .toList();
-    }
-
-    @Override
-    public Optional<BookDefinitionDto> getBookByIsbn(String isbn) {
-        return bookDefinitionRepository.findByIsbn(isbn).map(bookDefinitionMapper::toDto);
-    }
-
-    @Override
-    public Optional<BookDefinitionDto> getBookById(UUID id) {
-        return bookDefinitionRepository.findById(id).map(bookDefinitionMapper::toDto);
     }
 }
