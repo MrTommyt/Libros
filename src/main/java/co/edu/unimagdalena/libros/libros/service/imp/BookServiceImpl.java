@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +46,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<BookDto> getBookById(Long id) {
+    public Optional<BookDto> getBookById(UUID id) {
         return bookRepository.findById(id).map(bookMapper::toDto);
     }
 
@@ -55,7 +56,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteBookById(Long id) {
+    public void deleteBookById(UUID id) {
         bookRepository.deleteById(id);
     }
 

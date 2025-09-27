@@ -7,8 +7,11 @@ import co.edu.unimagdalena.libros.libros.service.ClientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 @RequiredArgsConstructor
@@ -17,32 +20,37 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     @Override
-    public Optional<ClientDto> getClientDtoByName(String name) {
+    public Optional<ClientDto> getClientByName(String name) {
         return clientRepository.findByName(name).map(clientMapper::toDto);
     }
 
     @Override
-    public Optional<ClientDto> getClientDtoByEmail(String email) {
+    public Optional<ClientDto> getClientByEmail(String email) {
         return clientRepository.findByEmail(email).map(clientMapper::toDto);
     }
 
     @Override
-    public Optional<ClientDto> getClientDtoById(UUID id) {
+    public Optional<ClientDto> getClientById(UUID id) {
         return clientRepository.findById(id).map(clientMapper::toDto);
     }
 
     @Override
-    public ClientDto createClientDto(ClientDto ClientDto) {
+    public ClientDto createClient(ClientDto ClientDto) {
         return clientMapper.toDto(clientRepository.save(clientMapper.toEntity(ClientDto)));
     }
 
     @Override
-    public void deleteClientDtoById(UUID id) {
+    public void deleteClientById(UUID id) {
         clientRepository.deleteById(id);
     }
 
     @Override
-    public ClientDto updateClientDto(ClientDto ClientDto) {
+    public ClientDto updateClient(ClientDto ClientDto) {
         return clientMapper.toDto(clientRepository.save(clientMapper.toEntity(ClientDto)));
+    }
+
+    @Override
+    public List<ClientDto> getAllClients() {
+        return clientRepository.findAll().stream().map(clientMapper::toDto).toList();
     }
 }
