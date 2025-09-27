@@ -2,6 +2,7 @@ package co.edu.unimagdalena.libros.libros.repository;
 
 import co.edu.unimagdalena.libros.libros.entity.BookDefinition;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,10 +10,21 @@ import java.util.UUID;
 
 
 public interface BookDefinitionRepository extends JpaRepository<BookDefinition, UUID> {
-    Optional<BookDefinition> findByTitle(String title);
-    List<BookDefinition> findByAuthor(String author);
-    List<BookDefinition> findByTitleContains(String title);
+    Optional<BookDefinition> findByIsbn(String isbn);
 
+    @Query("select d from BookDefinition d where d.author like ?1 and d.title like ?2 and d.editorial like ?3")
+    List<BookDefinition> findByTitleAuthorEditorial(String author, String title, String editorial);
 
-
+    default Optional<BookDefinition> findByEditorial(String editorial) {
+        return findByTitleAuthorEditorial("%", "%", editorial).stream().findFirst();
+    }
+    default Optional<BookDefinition> findByTitle(String title) {
+        return findByTitleAuthorEditorial("%", title, "%").stream().findFirst();
+    }
+    default List<BookDefinition> findByAuthor(String author) {
+        return findByTitleAuthorEditorial(author, "%", "%");
+    }
+    default List<BookDefinition> findByTitleContains(String title) {
+        return findByTitleAuthorEditorial("%", "%" + title + "%", "%");
+    }
 }

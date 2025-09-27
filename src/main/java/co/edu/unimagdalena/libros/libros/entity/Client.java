@@ -37,6 +37,8 @@ public class Client {
     @NotNull(message = "la contraseña es obligatoria")
     private String password;
 
+    @OneToMany(mappedBy = "client")
+    private List<Book> books;
 
     @Override
     public String toString() {

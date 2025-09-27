@@ -1,6 +1,7 @@
 package co.edu.unimagdalena.libros.libros.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.UUID;
@@ -26,7 +27,8 @@ public class BookDefinition {
     @Column(nullable = false)
     private String editorial;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @Pattern(regexp = "^(?=(?:\\D*\\d){10}(?:(?:\\D*\\d){3})?$)[\\d-]+$")
     private String isbn;
 
     @Override

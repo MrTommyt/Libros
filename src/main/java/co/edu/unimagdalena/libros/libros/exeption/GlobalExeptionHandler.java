@@ -56,15 +56,15 @@ public class GlobalExeptionHandler {
     }
 
 
-    @ExceptionHandler(BookNotFoundExeption.class)
+    @ExceptionHandler(BookNotFoundException.class)
     public ResponseEntity<ApiError> handleBookNotFoundException(Exception ex){
 
         ApiError error = ApiError.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
+                .status(HttpStatus.NOT_FOUND.value())
                 .message(ex.getMessage())
                 .build();
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 }
