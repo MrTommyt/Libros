@@ -44,8 +44,8 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "id=" + id +
-                ", nombre='" + name + '\'' +
-                ", direccion='" + address + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

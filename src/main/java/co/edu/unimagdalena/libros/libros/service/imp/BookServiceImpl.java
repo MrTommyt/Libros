@@ -54,6 +54,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+
     public BookDto getBookById(UUID id) {
         return bookRepository.findById(id)
                 .map(bookMapper::toDto).orElseThrow(() -> new BookNotFoundException("no se encontro el libro"));

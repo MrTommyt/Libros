@@ -33,10 +33,10 @@ public class BookDefinition {
 
     @Override
     public String toString() {
-        return "Libro{" +
+        return "BookDefinition{" +
                 "id=" + id +
-                ", titulo='" + title + '\'' +
-                ", autor='" + author + '\'' +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
                 ", editorial='" + editorial + '\'' +
                 ", isbn='" + isbn + '\'' +
                 '}';
