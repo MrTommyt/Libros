@@ -6,13 +6,15 @@ import co.edu.unimagdalena.libros.libros.dto.ClientDto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface BookService {
     List<BookDto> getAllClientBooks(ClientDto client);
     List<BookDto> getAllBooksByDefinition(BookDefinitionDto bookDefinition);
     List<BookDto> getAllBooks();
-    Optional<BookDto> getBookById(Long id);
+    BookDto getBookById(UUID id);
     BookDto createBook(BookDto bookDto);
-    void deleteBookById(Long id);
+    void deleteBookById(UUID id);
     BookDto updateBook(BookDto bookDto);
+
 }
