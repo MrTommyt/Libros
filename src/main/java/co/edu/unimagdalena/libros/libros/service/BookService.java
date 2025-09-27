@@ -12,8 +12,11 @@ public interface BookService {
     List<BookDto> getAllClientBooks(ClientDto client);
     List<BookDto> getAllBooksByDefinition(BookDefinitionDto bookDefinition);
     List<BookDto> getAllBooks();
-    Optional<BookDto> getBookById(UUID id);
+
+    BookDto getBookById(UUID id);
+
     BookDto createBook(BookDto bookDto);
     void deleteBookById(UUID id);
     BookDto updateBook(BookDto bookDto);
+
 }

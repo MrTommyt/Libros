@@ -15,6 +15,9 @@ import java.util.UUID;
 public class BookDto {
     private UUID id;
     private String state;
-    private BookDefinition bookDefinition;
-    private Client client;
+    private UUID bookDefinitionID;
+    private UUID clientId;
+    private BookDefinitionDto bookDefinition;
+
+
 }
