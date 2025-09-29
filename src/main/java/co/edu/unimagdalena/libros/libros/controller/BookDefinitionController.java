@@ -35,9 +35,7 @@ public class BookDefinitionController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDefinitionDto> getBookById(@PathVariable("id") UUID id){
-        return bookDefinitionService.getBookById(id)
-            .map(ResponseEntity::ok)
-            .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(bookDefinitionService.getBookById(id));
     }
 
     @PutMapping("/")
