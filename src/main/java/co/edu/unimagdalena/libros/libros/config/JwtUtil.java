@@ -63,6 +63,15 @@ public class JwtUtil {
                 .getSubject();
     }
 
+    public String getIdFromJwtToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getId();
+    }
+
     @PostConstruct
     public void validateSecretKey() {
         if (jwtSecret.getBytes(StandardCharsets.UTF_8).length < 32) {
