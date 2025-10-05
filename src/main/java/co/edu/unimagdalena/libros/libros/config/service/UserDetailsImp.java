@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class ClientDetailsImp implements UserDetails {
+public class UserDetailsImp implements UserDetails {
     private UUID id;
     private String name;
     private String address;
@@ -19,7 +19,7 @@ public class ClientDetailsImp implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public ClientDetailsImp(UUID id, String name, String address, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImp(UUID id, String name, String address, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -28,11 +28,11 @@ public class ClientDetailsImp implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static ClientDetailsImp build(Client user) {
+    public static UserDetailsImp build(Client user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
-        return new ClientDetailsImp(user.getId(),
+        return new UserDetailsImp(user.getId(),
                 user.getName(),
                 user.getAddress(),
                 user.getEmail(),
