@@ -15,6 +15,7 @@ import java.util.UUID;
 public class BookDto {
     private UUID id;
     private String state;
+    private String stateRequest;
     private UUID bookDefinitionID;
     private UUID clientId;
     private BookDefinitionDto bookDefinition;

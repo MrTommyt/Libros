@@ -1,4 +1,4 @@
-package co.edu.unimagdalena.libros.libros.service.imp;
+package co.edu.unimagdalena.libros.libros.service;
 
 public interface BookDefinitionSyncService {
     int syncFromGoogle(String query);

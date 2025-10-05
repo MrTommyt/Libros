@@ -1,6 +1,7 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 import co.edu.unimagdalena.libros.libros.dto.BookDto;
+import co.edu.unimagdalena.libros.libros.entity.Book;
 import co.edu.unimagdalena.libros.libros.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,9 @@ import java.util.UUID;
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
     private final BookService bookService;
-    
-    @GetMapping()
+
+    //esto es para mostrar todos los libros publicados para un home sin login
+    @GetMapping("/all")
     public ResponseEntity<List<BookDto>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
@@ -42,5 +44,29 @@ public class BookController {
     public ResponseEntity<BookDto> createBook(@Valid @RequestBody BookDto bookDto){
         return ResponseEntity.ok(bookService.createBook(bookDto));
     }
+
+    //libros publicados por el usuario actual
+    @GetMapping("/mine")
+    public ResponseEntity<List<BookDto>> getMyBooks(
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        String token = authorizationHeader.substring("bearer ".length());
+        UUID clientId = jwtService.extractClientId(token);
+        return ResponseEntity.ok(bookService.findBooksByClientId(clientId));
+    }
+
+    // Libros de los demás (cuando el usuario está logueado)
+    @GetMapping("/others")
+    public ResponseEntity<List<BookDto>> getBooksFromOthers(
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        String token = authorizationHeader.substring("bearer ".length());
+        UUID clientId = jwtService.extractClientId(token);
+        return ResponseEntity.ok(bookService.findBooksFromOthers(clientId));
+    }
+
+
+
+
 
 }
