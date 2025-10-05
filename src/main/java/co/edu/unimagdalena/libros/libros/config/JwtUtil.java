@@ -1,6 +1,6 @@
 package co.edu.unimagdalena.libros.libros.config;
 
-import co.edu.unimagdalena.libros.libros.config.service.ClientDetailsImp;
+import co.edu.unimagdalena.libros.libros.config.service.UserDetailsImp;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -27,7 +27,7 @@ public class JwtUtil {
 
     public String generateJwtToken(Authentication authentication){
 
-        ClientDetailsImp userDetails = (ClientDetailsImp)authentication.getPrincipal();
+        UserDetailsImp userDetails = (UserDetailsImp)authentication.getPrincipal();
 
         String token = Jwts.builder()
                 .setSubject(userDetails.getEmail())
