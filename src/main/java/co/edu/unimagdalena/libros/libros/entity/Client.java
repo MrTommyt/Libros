@@ -49,5 +49,13 @@ public class Client {
     )
     private Set<Role> roles = new HashSet<>();
 
+    public Client(UUID id, String name, String address, String email, String password, Set<Role> roles) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
 }
 
