@@ -20,6 +20,9 @@ public class Book {
     @Column(nullable = false)
     private String state;
 
+    @Column
+    private String stateRequest;
+
     @ManyToOne
     @JoinColumn(name = "book_definition_id")
     private BookDefinition bookDefinition;

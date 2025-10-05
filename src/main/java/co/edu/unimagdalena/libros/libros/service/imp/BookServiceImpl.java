@@ -84,4 +84,27 @@ public class BookServiceImpl implements BookService {
     public BookDto updateBook(BookDto bookDto) {
         return bookMapper.toDto(bookRepository.save(bookMapper.toEntity(bookDto)));
     }
+
+    //solo mis libros
+    @Override
+    public List<BookDto> findBooksByClientId(UUID ClientId) {
+        return bookRepository.findByClientIdAndState(ClientId, "PUBLICADO")
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    // libros de los demas
+    @Override
+    public List<BookDto> findBooksFromOthers(UUID myClientId) {
+        return bookRepository.findByClientIdNotAndState(myClientId, "PUBLICADO")
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<BookDto> findAllPublicBooks() {
+        return List.of();
+    }
 }

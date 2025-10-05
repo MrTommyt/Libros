@@ -1,7 +1,7 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 
-import co.edu.unimagdalena.libros.libros.service.imp.BookDefinitionSyncService;
+import co.edu.unimagdalena.libros.libros.service.BookDefinitionSyncService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
