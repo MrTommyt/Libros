@@ -1,15 +1,13 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 
-import co.edu.unimagdalena.libros.libros.dto.BookDto;
-import co.edu.unimagdalena.libros.libros.dto.ClientDto;
-import co.edu.unimagdalena.libros.libros.dto.CreateExchangeRequestDto;
-import co.edu.unimagdalena.libros.libros.dto.ExchangeRequestDto;
+import co.edu.unimagdalena.libros.libros.dto.*;
 import co.edu.unimagdalena.libros.libros.enums.ExchangeRequestStatus;
 import co.edu.unimagdalena.libros.libros.mapper.BookMapper;
 import co.edu.unimagdalena.libros.libros.mapper.ClientMapper;
 import co.edu.unimagdalena.libros.libros.repository.BookRepository;
 import co.edu.unimagdalena.libros.libros.repository.ClientRepository;
+import co.edu.unimagdalena.libros.libros.repository.ExchangeRequestRespository;
 import co.edu.unimagdalena.libros.libros.security.JwtService;
 import co.edu.unimagdalena.libros.libros.service.imp.ExchangeRequestServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +33,8 @@ public class ExchangeRequestController {
     private ClientMapper clientMapper ;
     @Autowired
     private JwtService jwtService; // Tu servicio para extraer datos de JWT
+    @Autowired
+    private ExchangeRequestRespository exchangeRequestRespository;
 
     @PostMapping
     public ResponseEntity<ExchangeRequestDto> createExchange(
@@ -112,8 +112,11 @@ public class ExchangeRequestController {
         return ResponseEntity.ok(exchangeRequestServiceImp.getRecivedExchangeRequests(userId));
     }
 
-
-
-
+    @GetMapping("/exchange/completed")
+    public List<ExchangeView> myCompleted(@RequestHeader("Authorization") String h){
+        var token = h.substring(7);
+        var uid = jwtService.extractClientId(token);
+        return exchangeRequestRespository.findMyCompletedExchanges(uid);
+    }
 
 }
