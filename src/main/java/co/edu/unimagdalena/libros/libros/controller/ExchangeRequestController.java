@@ -100,7 +100,6 @@ public class ExchangeRequestController {
         return ResponseEntity.ok(result);
     }
 
-
     @GetMapping("/received")
     public ResponseEntity<List<ExchangeRequestDto>> getReceivedRequests(
             @RequestHeader("Authorization") String authorizationHeader
