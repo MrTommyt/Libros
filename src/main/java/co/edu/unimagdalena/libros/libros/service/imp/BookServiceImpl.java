@@ -71,6 +71,7 @@ public class BookServiceImpl implements BookService {
         book.setClient(client);
         book.setBookDefinition(bookDefinition);
         book.setState(dto.getState());
+        book.setStateRequest("PUBLICADO");
 
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -88,7 +89,7 @@ public class BookServiceImpl implements BookService {
     //solo mis libros
     @Override
     public List<BookDto> findBooksByClientId(UUID ClientId) {
-        return bookRepository.findByClientIdAndState(ClientId, "PUBLICADO")
+        return bookRepository.findByClientIdAndStateRequest(ClientId, "PUBLICADO")
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
@@ -97,7 +98,7 @@ public class BookServiceImpl implements BookService {
     // libros de los demas
     @Override
     public List<BookDto> findBooksFromOthers(UUID myClientId) {
-        return bookRepository.findByClientIdNotAndState(myClientId, "PUBLICADO")
+        return bookRepository.findByClientIdNotAndStateRequest(myClientId, "PUBLICADO")
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();

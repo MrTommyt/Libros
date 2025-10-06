@@ -16,7 +16,9 @@ public class BookDto {
     private UUID id;
     private String state;
     private String stateRequest;
+    private BookDefinitionDto bookDefinition; // Si tienes, para mostrar el título
+    private UUID clientId;  // <-- AGREGA ESTO
+    private String clientName; // <-- AGREGA ESTO (opcional, para mostrar dueño)
     private UUID bookDefinitionID;
-    private UUID clientId;
-    private BookDefinitionDto bookDefinition;
 }
+

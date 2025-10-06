@@ -1,6 +1,8 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 import co.edu.unimagdalena.libros.libros.dto.BookDto;
+import co.edu.unimagdalena.libros.libros.entity.Book;
+import co.edu.unimagdalena.libros.libros.security.JwtService;
 import co.edu.unimagdalena.libros.libros.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +46,8 @@ public class BookController {
     }
 
 
+    private final JwtService jwtService;
+
     //esto es para mostrar todos los libros publicados para un home sin login
     private static final Logger log = LoggerFactory.getLogger(BookDefinitionController.class);
     
@@ -79,8 +83,13 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getMyBooks(
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        String token = authorizationHeader.substring("Bearer ".length());
-        UUID clientId = jwtUtil.getIdFromJwtToken(token);
+        final String prefix = "Bearer ";
+        if (!authorizationHeader.startsWith(prefix)) {
+            throw new RuntimeException("Authorization header no válido");
+        }
+        String token = authorizationHeader.substring(prefix.length());
+
+        UUID clientId = jwtService.extractClientId(token);
         return ResponseEntity.ok(bookService.findBooksByClientId(clientId));
     }
 
@@ -89,8 +98,12 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getBooksFromOthers(
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        String token = authorizationHeader.substring("Bearer ".length());
-        UUID clientId = jwtUtil.getIdFromJwtToken(token);
+        final String prefix = "Bearer ";
+        if (!authorizationHeader.startsWith(prefix)) {
+            throw new RuntimeException("Authorization header no válido");
+        }
+        String token = authorizationHeader.substring(prefix.length());
+        UUID clientId = jwtService.extractClientId(token);
         return ResponseEntity.ok(bookService.findBooksFromOthers(clientId));
     }
 }

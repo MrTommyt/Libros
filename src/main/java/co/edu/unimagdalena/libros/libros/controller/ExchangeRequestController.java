@@ -11,6 +11,7 @@ import co.edu.unimagdalena.libros.libros.mapper.BookMapper;
 import co.edu.unimagdalena.libros.libros.mapper.ClientMapper;
 import co.edu.unimagdalena.libros.libros.repository.BookRepository;
 import co.edu.unimagdalena.libros.libros.repository.ClientRepository;
+import co.edu.unimagdalena.libros.libros.security.JwtService;
 import co.edu.unimagdalena.libros.libros.service.imp.ExchangeRequestServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/exchange")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ExchangeRequestController {
     @Autowired
     private ExchangeRequestServiceImp exchangeRequestServiceImp;
@@ -48,30 +50,36 @@ public class ExchangeRequestController {
     public ResponseEntity<ExchangeRequestDto> createExchange(
             @RequestBody CreateExchangeRequestDto dto,
             @RequestHeader("Authorization") String authorizationHeader
-    )  {
-        String token = authorizationHeader.substring("Bearer ".length());
-        UUID fromUserId = jwtUtil.getIdFromJwtToken(token);
+    ) throws Exception {
+        System.out.println("Authorization header received: " + authorizationHeader);
 
-        BookDto bookOffered = bookMapper.toDto(bookRepository.findById(dto.getBookOfferedId()).orElseThrow());
-        BookDto bookRequested = bookMapper.toDto(bookRepository.findById(dto.getBookRequestId()).orElseThrow());
-        ClientDto fromUser = clientMapper.toDto(clientRepository.findById(fromUserId).orElseThrow());
-        ClientDto toUser = clientMapper.toDto(clientRepository.findById(dto.getToUserId()).orElseThrow());
+        final String prefix = "Bearer ";
+        if (!authorizationHeader.startsWith(prefix)) throw new RuntimeException("Header inválido");
+        String token = authorizationHeader.substring(prefix.length());
+        UUID fromUserId = jwtService.extractClientId(token);
 
-        if (fromUser.getId().equals(toUser.getId())) {
-            throw new IllegalArgumentException("No puedes solicitar intercambio contigo mismo.");
-        }
+        BookDto bookOffered = bookMapper.toDto(
+                bookRepository.findById(dto.getBookOfferedId()).orElseThrow(() -> new Exception("Book offered not found"))
+        );
+        BookDto bookRequested = bookMapper.toDto(
+                bookRepository.findById(dto.getBookRequestId()).orElseThrow(() -> new Exception("Book requested not found"))
+        );
+        ClientDto fromUser = clientMapper.toDto(
+                clientRepository.findById(fromUserId).orElseThrow(() -> new Exception("User not found"))
+        );
+        ClientDto toUser = clientMapper.toDto(
+                clientRepository.findById(dto.getToUserId()).orElseThrow(() -> new Exception("User not found"))
+        );
+        if (fromUser.getId().equals(toUser.getId())) throw new IllegalArgumentException("No puedes solicitarte a ti mismo");
 
-        ExchangeRequestDto requestDto = exchangeRequestServiceImp.createExchangeRequest(bookOffered, bookRequested, fromUser, toUser);
+        ExchangeRequestDto requestDto = exchangeRequestServiceImp.createExchangeRequest(
+                bookOffered, bookRequested, fromUser, toUser
+        );
         return ResponseEntity.ok(requestDto);
     }
 
-    /**
-     * Updates the status of an existing exchange request.
-     * Endpoint: PUT /exchange/{id}/status
-     * @param id Exchange request ID.
-     * @param status New status for the exchange request.
-     * @return The updated ExchangeRequestDto.
-     */
+
+
     @PutMapping("/{id}/status")
     public ResponseEntity<ExchangeRequestDto> uptdateStatus(@PathVariable UUID id, @RequestParam ExchangeRequestStatus status) {
         return ResponseEntity.ok(exchangeRequestServiceImp.updateExchangeRequest(id, status));
@@ -99,24 +107,32 @@ public class ExchangeRequestController {
     public ResponseEntity<List<ExchangeRequestDto>> getSentRequests(
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        String token = authorizationHeader.substring("Bearer ".length());
-        UUID userId = jwtUtil.getIdFromJwtToken(token);
-        return ResponseEntity.ok(exchangeRequestServiceImp.getSentExchangeRequest(userId));
+        final String prefix = "Bearer ";
+        if (!authorizationHeader.startsWith(prefix)) {
+            throw new RuntimeException("Header inválido");
+        }
+        String token = authorizationHeader.substring(prefix.length());
+        UUID userId = jwtService.extractClientId(token);
+
+        System.out.println("userId: " + userId);
+
+        List<ExchangeRequestDto> result = exchangeRequestServiceImp.getSentExchangeRequest(userId);
+
+        System.out.println("Exchange requests sent: " + (result != null ? result.size() : "null"));
+
+        return ResponseEntity.ok(result);
     }
 
-    /**
-     * Retrieves all exchange requests received by the authenticated user.
-     * Endpoint: GET /exchange/received
-     * Requires Authorization header (JWT).
-     * @param authorizationHeader JWT token for authentication.
-     * @return List of received ExchangeRequestDto.
-     */
+
     @GetMapping("/received")
     public ResponseEntity<List<ExchangeRequestDto>> getReceivedRequests(
             @RequestHeader("Authorization") String authorizationHeader
     ) {
-        String token = authorizationHeader.substring("Bearer ".length());
-        UUID userId = jwtUtil.getIdFromJwtToken(token);
+        String prefix = "Bearer ";
+        if (!authorizationHeader.startsWith(prefix)) throw new RuntimeException("Header inválido");
+        String token = authorizationHeader.substring(prefix.length());
+
+        UUID userId = jwtService.extractClientId(token);
         return ResponseEntity.ok(exchangeRequestServiceImp.getRecivedExchangeRequests(userId));
     }
 

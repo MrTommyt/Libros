@@ -20,17 +20,9 @@ import java.util.UUID;
 public class ClientDto {
 
     private UUID id;
-    @NotBlank(message = "El nombre del cliente es obligatorio")
     private String name;
-    @NotBlank(message = "La direccion es obligatoria")
     private String address;
-    @Email(message = "Debe ser un email válido")
-    @NotBlank(message = "El email es obligatorio")
     private String email;
-    @NotNull(message = "la contraseña es obligatoria")
-    private String password;
-    @NotNull(message = "campo obligatorio")
-    private List<BookDefinition> bookDefinitions;
 
     @Override
     public String toString() {

@@ -13,7 +13,10 @@ import co.edu.unimagdalena.libros.libros.mapper.ExchangeRequestMapper;
 import co.edu.unimagdalena.libros.libros.repository.BookRepository;
 import co.edu.unimagdalena.libros.libros.repository.ExchangeRequestRespository;
 import co.edu.unimagdalena.libros.libros.service.ExchangeRequestService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,10 +29,10 @@ import java.util.UUID;
 
 public class ExchangeRequestServiceImp implements ExchangeRequestService {
 
-    private ExchangeRequestRespository exchangeRequestRespository;
-    private ExchangeRequestMapper exchangeRequestMapper;
-    private BookRepository bookRepository;
-    private BookMapper bookMapper;
+    private final ExchangeRequestRespository exchangeRequestRespository;
+    private final ExchangeRequestMapper exchangeRequestMapper;
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
     public ExchangeRequestDto createExchangeRequest(BookDto bookOffered,BookDto bookRequested, ClientDto fromUser, ClientDto toUser) {
         ExchangeRequestDto exchangeRequestDto = new ExchangeRequestDto();
@@ -74,21 +77,45 @@ public class ExchangeRequestServiceImp implements ExchangeRequestService {
 
     }
 
+    private static final Logger log = LoggerFactory.getLogger(ExchangeRequestServiceImp.class);
+
     @Override
+    @Transactional
     public ExchangeRequestDto CompleteExchangeRequest(UUID requestId) {
-        ExchangeRequest request = exchangeRequestRespository.findByid(requestId).orElseThrow(() -> new BookNotFoundException("Request not found"));
+        ExchangeRequest request = exchangeRequestRespository.findByid(requestId)
+                .orElseThrow(() -> new BookNotFoundException("Request not found"));
 
-        request.getBookRequested().setStateRequest("COMPLETE");
-        request.getBookOffered().setStateRequest("COMPLETE");
+        Book bookRequested = bookRepository.findById(request.getBookRequested().getId()).orElseThrow(() -> new BookNotFoundException("Libro no encontrado"));
+        Book bookOffered = bookRepository.findById(request.getBookOffered().getId()).orElseThrow(() -> new BookNotFoundException("Libro no encontrado"));
 
 
-        bookRepository.save(request.getBookRequested());
-        bookRepository.save(request.getBookOffered());
+        log.info("Antes: bookRequested id={}, stateRequest={}", bookRequested.getId(), bookRequested.getStateRequest());
+        log.info("Antes: bookOffered id={}, stateRequest={}", bookOffered.getId(), bookOffered.getStateRequest());
+
+        // Cambia el estado
+        bookRequested.setStateRequest("EXCHANGED");
+        bookOffered.setStateRequest("EXCHANGED");
+
+        // Guarda ambos libros
+        Book updatedRequested = bookRepository.save(bookRequested);
+        Book updatedOffered = bookRepository.save(bookOffered);
+
+        log.info("Después: bookRequested id={}, stateRequest={}", updatedRequested.getId(), updatedRequested.getStateRequest());
+        log.info("Después: bookOffered id={}, stateRequest={}", updatedOffered.getId(), updatedOffered.getStateRequest());
+
+        request.setBookRequested(updatedRequested);
+        request.setBookOffered(updatedOffered);
 
         request.setStatus(ExchangeRequestStatus.COMPLETED);
 
-        return exchangeRequestMapper.toDto(exchangeRequestRespository.save(request));
+        ExchangeRequest savedRequest = exchangeRequestRespository.save(request);
 
+
+        // entityManager.flush();
+
+        return exchangeRequestMapper.toDto(savedRequest);
     }
+
+
 
 }

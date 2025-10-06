@@ -8,12 +8,13 @@ import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    @Mappings({
-            @Mapping(source = "bookDefinition", target = "bookDefinition"),
-            @Mapping(source = "bookDefinition.id", target = "bookDefinitionID"),
-            @Mapping(source = "client.id", target = "clientId")
-    })
+    @Mapping(source = "bookDefinition", target = "bookDefinition")
+    @Mapping(target = "clientId", source = "client.id")
+    @Mapping(target = "clientName", source = "client.name")
+    @Mapping(target = "bookDefinitionID", source = "bookDefinition.id")
     BookDto toDto(Book book);
 
     Book toEntity(BookDto bookDto);
 }
+
+
