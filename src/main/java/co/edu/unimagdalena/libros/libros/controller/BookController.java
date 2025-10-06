@@ -1,5 +1,14 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
+import co.edu.unimagdalena.libros.libros.dto.BookDto;
+import co.edu.unimagdalena.libros.libros.service.BookService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +45,8 @@ public class BookController {
 
 
     //esto es para mostrar todos los libros publicados para un home sin login
+    private static final Logger log = LoggerFactory.getLogger(BookDefinitionController.class);
+    
     @GetMapping("/all")
     public ResponseEntity<List<BookDto>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
@@ -43,6 +54,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable("id") UUID id){
+        log.info("Consultando libros...");
         return ResponseEntity.ok(bookService.getBookById(id));
     }
 
@@ -81,9 +93,4 @@ public class BookController {
         UUID clientId = jwtUtil.getIdFromJwtToken(token);
         return ResponseEntity.ok(bookService.findBooksFromOthers(clientId));
     }
-
-
-
-
-
 }
