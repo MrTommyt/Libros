@@ -14,6 +14,8 @@ public interface ExchangeRequestRespository extends JpaRepository<ExchangeReques
     List<ExchangeRequest> findByToUserId(UUID toUserId);
     List<ExchangeRequest> findByFromUserId(UUID fromUserId);
     List<ExchangeRequest> findByStatus(ExchangeRequestStatus status);
+    List<ExchangeRequest> findByFromUserIdAndStatus(UUID fromUserId, ExchangeRequestStatus status);
+
 
     Optional<ExchangeRequest> findByid(UUID id);
 }

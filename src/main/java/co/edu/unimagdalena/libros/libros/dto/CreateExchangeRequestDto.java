@@ -11,8 +11,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateExchangeRequestDto {
-
-    private UUID bookRequestId;
+    private UUID bookRequestId;     // Este nombre, tal cual
     private UUID bookOfferedId;
     private UUID toUserId;
+
+    private UUID id;
+    private BookDto bookOffered;
+    private BookDto bookRequested;
+    private ClientDto fromUser;
+    private ClientDto toUser;
+    private String stateRequest;
+
 }
+
+

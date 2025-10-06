@@ -12,8 +12,9 @@ import java.util.UUID;
 public interface BookRepository extends JpaRepository<Book, UUID> {
     List<Book> findBooksByBookDefinition(BookDefinition bookDefinition);
     List<Book> findBooksByClient(Client client);
-    List<Book> findByClientIdAndState(UUID clientId, String state);
-    List<Book> findByClientIdNotAndState(UUID clientId, String state);
+
+    List<Book> findByClientIdAndStateRequest(UUID clientId, String stateRequest);
+    List<Book> findByClientIdNotAndStateRequest(UUID clientId, String stateRequest);
     List<Book> findByState(String state);
 
 
