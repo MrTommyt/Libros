@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -31,6 +32,7 @@ public class JwtUtil {
 
         String token = Jwts.builder()
                 .setSubject(userDetails.getEmail())
+                .claim("UserId", userDetails.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS512)
@@ -61,6 +63,17 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public UUID getIdFromJwtToken(String token) {
+        String id = Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("UserId", String.class);
+
+        return id != null ? java.util.UUID.fromString(id) : null;
     }
 
     @PostConstruct
