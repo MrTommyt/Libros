@@ -15,7 +15,7 @@ public interface ExchangeRequestService {
     List<ExchangeRequestDto> getSentExchangeRequest(UUID userId);
 
     ExchangeRequestDto updateExchangeRequest(UUID id, ExchangeRequestStatus newStatus);
-    ExchangeRequestDto CompleteExchangeRequest(UUID requestId);
+    ExchangeRequestDto completeExchangeRequest(UUID requestId);
 
 
 

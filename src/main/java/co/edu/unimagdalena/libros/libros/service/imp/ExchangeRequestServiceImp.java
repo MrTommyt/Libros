@@ -75,7 +75,7 @@ public class ExchangeRequestServiceImp implements ExchangeRequestService {
     }
 
     @Override
-    public ExchangeRequestDto CompleteExchangeRequest(UUID requestId) {
+    public ExchangeRequestDto completeExchangeRequest(UUID requestId) {
         ExchangeRequest request = exchangeRequestRespository.findByid(requestId).orElseThrow(() -> new BookNotFoundException("Request not found"));
 
         request.getBookRequested().setStateRequest("COMPLETE");

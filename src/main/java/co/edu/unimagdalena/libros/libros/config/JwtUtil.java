@@ -31,7 +31,7 @@ public class JwtUtil {
         UserDetailsImp userDetails = (UserDetailsImp)authentication.getPrincipal();
 
         String token = Jwts.builder()
-                .setSubject(userDetails.getEmail())
+                .setSubject(userDetails.getUsername())
                 .claim("UserId", userDetails.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))

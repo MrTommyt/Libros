@@ -1,17 +1,10 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
-import co.edu.unimagdalena.libros.libros.dto.BookDto;
-import co.edu.unimagdalena.libros.libros.service.BookService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,24 +21,21 @@ import co.edu.unimagdalena.libros.libros.config.JwtUtil;
 import co.edu.unimagdalena.libros.libros.dto.BookDto;
 import co.edu.unimagdalena.libros.libros.service.BookService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/books")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
     private final BookService bookService;
     private final JwtUtil jwtUtil;
 
+    //esto es para mostrar todos los libros publicados para un home sin login
+    private static final Logger log = LoggerFactory.getLogger(BookController.class);
+
     public BookController(BookService bookService, JwtUtil jwtUtil) {
         this.bookService = bookService;
         this.jwtUtil = jwtUtil;
     }
-
-
-    //esto es para mostrar todos los libros publicados para un home sin login
-    private static final Logger log = LoggerFactory.getLogger(BookDefinitionController.class);
     
     @GetMapping("/all")
     public ResponseEntity<List<BookDto>> getAllBooks() {
