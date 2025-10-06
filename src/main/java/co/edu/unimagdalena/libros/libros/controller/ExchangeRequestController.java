@@ -1,20 +1,16 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 
+import co.edu.unimagdalena.libros.libros.config.JwtUtil;
 import co.edu.unimagdalena.libros.libros.dto.BookDto;
 import co.edu.unimagdalena.libros.libros.dto.ClientDto;
 import co.edu.unimagdalena.libros.libros.dto.CreateExchangeRequestDto;
 import co.edu.unimagdalena.libros.libros.dto.ExchangeRequestDto;
-import co.edu.unimagdalena.libros.libros.entity.Book;
-import co.edu.unimagdalena.libros.libros.entity.Client;
-import co.edu.unimagdalena.libros.libros.entity.ExchangeRequest;
 import co.edu.unimagdalena.libros.libros.enums.ExchangeRequestStatus;
 import co.edu.unimagdalena.libros.libros.mapper.BookMapper;
 import co.edu.unimagdalena.libros.libros.mapper.ClientMapper;
 import co.edu.unimagdalena.libros.libros.repository.BookRepository;
 import co.edu.unimagdalena.libros.libros.repository.ClientRepository;
-import co.edu.unimagdalena.libros.libros.service.BookService;
-import co.edu.unimagdalena.libros.libros.service.ExchangeRequestService;
 import co.edu.unimagdalena.libros.libros.service.imp.ExchangeRequestServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +33,7 @@ public class ExchangeRequestController {
     @Autowired
     private ClientMapper clientMapper ;
     @Autowired
-    private JwtService jwtService; // Tu servicio para extraer datos de JWT
+    private JwtUtil jwtUtil; // Tu servicio para extraer datos de JWT
 
     @PostMapping
     public ResponseEntity<ExchangeRequestDto> createExchange(
@@ -45,7 +41,7 @@ public class ExchangeRequestController {
             @RequestHeader("Authorization") String authorizationHeader
     )  {
         String token = authorizationHeader.substring("Bearer ".length());
-        UUID fromUserId = jwtService.extractClientId(token);
+        UUID fromUserId = jwtUtil.getIdFromJwtToken(token);
 
         BookDto bookOffered = bookMapper.toDto(bookRepository.findById(dto.getBookOfferedId()).orElseThrow());
         BookDto bookRequested = bookMapper.toDto(bookRepository.findById(dto.getBookRequestId()).orElseThrow());
@@ -75,7 +71,7 @@ public class ExchangeRequestController {
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         String token = authorizationHeader.substring("Bearer ".length());
-        UUID userId = jwtService.extractClientId(token);
+        UUID userId = jwtUtil.getIdFromJwtToken(token);
         return ResponseEntity.ok(exchangeRequestServiceImp.getSentExchangeRequest(userId));
     }
 
@@ -84,7 +80,7 @@ public class ExchangeRequestController {
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         String token = authorizationHeader.substring("Bearer ".length());
-        UUID userId = jwtService.extractClientId(token);
+        UUID userId = jwtUtil.getIdFromJwtToken(token);
         return ResponseEntity.ok(exchangeRequestServiceImp.getRecivedExchangeRequests(userId));
     }
 
