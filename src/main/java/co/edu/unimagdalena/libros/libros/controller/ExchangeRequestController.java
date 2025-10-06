@@ -35,6 +35,15 @@ public class ExchangeRequestController {
     @Autowired
     private JwtUtil jwtUtil; // Tu servicio para extraer datos de JWT
 
+    /**
+     * Creates a new exchange request between two users for their books.
+     * Endpoint: POST /exchange
+     * Requires Authorization header (JWT).
+     * @param dto Details of the exchange (offered/requested book, target user).
+     * @param authorizationHeader JWT token for authentication.
+     * @return The created ExchangeRequestDto.
+     * @throws IllegalArgumentException if the user tries to exchange with themselves.
+     */
     @PostMapping
     public ResponseEntity<ExchangeRequestDto> createExchange(
             @RequestBody CreateExchangeRequestDto dto,
@@ -56,16 +65,36 @@ public class ExchangeRequestController {
         return ResponseEntity.ok(requestDto);
     }
 
+    /**
+     * Updates the status of an existing exchange request.
+     * Endpoint: PUT /exchange/{id}/status
+     * @param id Exchange request ID.
+     * @param status New status for the exchange request.
+     * @return The updated ExchangeRequestDto.
+     */
     @PutMapping("/{id}/status")
     public ResponseEntity<ExchangeRequestDto> uptdateStatus(@PathVariable UUID id, @RequestParam ExchangeRequestStatus status) {
         return ResponseEntity.ok(exchangeRequestServiceImp.updateExchangeRequest(id, status));
     }
 
+    /**
+     * Marks an exchange request as completed.
+     * Endpoint: PUT /exchange/{id}/complete
+     * @param id Exchange request ID.
+     * @return The completed ExchangeRequestDto.
+     */
     @PutMapping("/{id}/complete")
     public ResponseEntity<ExchangeRequestDto> completeExchange(@PathVariable UUID id) {
-        return ResponseEntity.ok(exchangeRequestServiceImp.CompleteExchangeRequest(id));
+        return ResponseEntity.ok(exchangeRequestServiceImp.completeExchangeRequest(id));
     }
 
+    /**
+     * Retrieves all exchange requests sent by the authenticated user.
+     * Endpoint: GET /exchange/sent
+     * Requires Authorization header (JWT).
+     * @param authorizationHeader JWT token for authentication.
+     * @return List of sent ExchangeRequestDto.
+     */
     @GetMapping("/sent")
     public ResponseEntity<List<ExchangeRequestDto>> getSentRequests(
             @RequestHeader("Authorization") String authorizationHeader
@@ -75,6 +104,13 @@ public class ExchangeRequestController {
         return ResponseEntity.ok(exchangeRequestServiceImp.getSentExchangeRequest(userId));
     }
 
+    /**
+     * Retrieves all exchange requests received by the authenticated user.
+     * Endpoint: GET /exchange/received
+     * Requires Authorization header (JWT).
+     * @param authorizationHeader JWT token for authentication.
+     * @return List of received ExchangeRequestDto.
+     */
     @GetMapping("/received")
     public ResponseEntity<List<ExchangeRequestDto>> getReceivedRequests(
             @RequestHeader("Authorization") String authorizationHeader
