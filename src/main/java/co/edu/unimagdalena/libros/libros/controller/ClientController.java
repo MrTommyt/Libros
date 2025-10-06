@@ -1,6 +1,8 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
+import co.edu.unimagdalena.libros.libros.dto.BookDto;
 import co.edu.unimagdalena.libros.libros.dto.ClientDto;
+import co.edu.unimagdalena.libros.libros.service.BookService;
 import co.edu.unimagdalena.libros.libros.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ClientController {
     private final ClientService clientService;
+    private final BookService bookService;
 
     @GetMapping()
     public ResponseEntity<List<ClientDto>> getAllClients() {
@@ -44,4 +47,10 @@ public class ClientController {
     public ResponseEntity<ClientDto> createClient(@Valid @RequestBody ClientDto clientDto) {
         return ResponseEntity.ok(clientService.createClient(clientDto));
     }
+
+    @GetMapping("/{id}/books")
+    public ResponseEntity<List<BookDto>> getBooksByClientId(@PathVariable("id") UUID id){
+        return ResponseEntity.ok(bookService.findBooksByClientId(id));
+    }
+
 }
