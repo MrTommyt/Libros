@@ -12,15 +12,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/titles")
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookDefinitionController {
+    private static final Logger log = LoggerFactory.getLogger(BookDefinitionController.class);
     private final BookDefinitionService bookDefinitionService;
 
     @GetMapping()
     public ResponseEntity<List<BookDefinitionDto>> getAllBooks(){
+        log.info("Consultando libros...");
         return ResponseEntity.ok(bookDefinitionService.getAllBooks());
     }
 

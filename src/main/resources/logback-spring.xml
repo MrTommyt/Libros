@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <springProperty name="LOKI_URL" source="logging.loki.url"/>
+    <springProperty name="SERVICE_NAME" source="spring.application.name"/>
+
+    <!-- Encoder JSON con campos estándar y MDC -->
+    <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
+        <http class="com.github.loki4j.logback.ApacheHttpSender">
+            <url>${LOKI_URL}</url>
+            <requestTimeoutMs>10000</requestTimeoutMs>
+        </http>
+        <batchSize>100</batchSize>
+        <batchDelayMs>200</batchDelayMs>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <!-- Timestamp -->
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <!-- Mensaje y nivel -->
+                <logLevel/>
+                <loggerName/>
+                <threadName/>
+                <message/>
+                <stackTrace/>
+                <!-- Propiedades adicionales (MDC, etc.) -->
+                <mdc/>
+                <!-- Metadata fijo -->
+                <provider class="net.logstash.logback.composite.LoggingEventFormattedTimestampJsonProvider"/>
+            </providers>
+        </encoder>
+        <!-- Labels de Loki: service, nivel, etc. -->
+        <labels>
+            <label>
+                <key>service</key>
+                <value>${SERVICE_NAME}</value>
+            </label>
+            <label>
+                <key>level</key>
+                <value>${level:-UNKNOWN}</value>
+            </label>
+        </labels>
+    </appender>
+
+    <!-- Appender de consola opcional -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger raíz: envía a consola y Loki -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="LOKI"/>
+    </root>
+</configuration>
