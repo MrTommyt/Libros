@@ -20,7 +20,7 @@ import java.util.UUID;
 public class ClientDto {
 
     private UUID id;
-    @NotBlank(message = "El nombre del médico es obligatorio")
+    @NotBlank(message = "El nombre del cliente es obligatorio")
     private String name;
     @NotBlank(message = "La direccion es obligatoria")
     private String address;

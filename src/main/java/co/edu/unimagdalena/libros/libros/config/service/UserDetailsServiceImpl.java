@@ -39,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserInfoDto addUser(UserInfoDto userInfo) {
         Client client = new Client(
                 null,
-                userInfo.name(),
+                userInfo.username(),
                 null,
                 userInfo.email(),
                 passwordEncoder.encode(userInfo.password()),

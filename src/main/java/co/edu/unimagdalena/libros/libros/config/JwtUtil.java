@@ -30,7 +30,7 @@ public class JwtUtil {
         UserDetailsImp userDetails = (UserDetailsImp)authentication.getPrincipal();
 
         String token = Jwts.builder()
-                .setSubject(userDetails.getEmail())
+                .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(key(), SignatureAlgorithm.HS512)

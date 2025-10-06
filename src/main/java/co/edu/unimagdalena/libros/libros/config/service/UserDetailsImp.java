@@ -1,6 +1,8 @@
 package co.edu.unimagdalena.libros.libros.config.service;
 
 import co.edu.unimagdalena.libros.libros.entity.Client;
+import co.edu.unimagdalena.libros.libros.entity.User;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,31 +13,25 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UserDetailsImp implements UserDetails {
-    private UUID id;
-    private String name;
-    private String address;
-    private String email;
-    private String password;
+    private final Long id;
+    private final String username;
+    private final String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImp(UUID id, String name, String address, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImp(Long id, String name, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.name = name;
-        this.address = address;
-        this.email = email;
+        this.username = name;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static UserDetailsImp build(Client user) {
+    public static UserDetailsImp build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
         return new UserDetailsImp(user.getId(),
-                user.getName(),
-                user.getAddress(),
-                user.getEmail(),
+                user.getUsername(),
                 user.getPassword(),
                 authorities);
     }
@@ -45,16 +41,8 @@ public class UserDetailsImp implements UserDetails {
         return authorities;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override
@@ -64,7 +52,7 @@ public class UserDetailsImp implements UserDetails {
 
     @Override
     public String getUsername() {
-        return name;
+        return username;
     }
 
 }

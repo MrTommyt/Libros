@@ -37,7 +37,7 @@ public class ExchangeRequestController {
     @Autowired
     private ClientMapper clientMapper ;
     @Autowired
-    private JwtService jwtService; // Tu servicio para extraer datos de JWT
+    private Jwt jwtService; // Tu servicio para extraer datos de JWT
 
     @PostMapping
     public ResponseEntity<ExchangeRequestDto> createExchange(
