@@ -19,6 +19,4 @@ public class BookDto {
     private UUID bookDefinitionID;
     private UUID clientId;
     private BookDefinitionDto bookDefinition;
-
-
 }

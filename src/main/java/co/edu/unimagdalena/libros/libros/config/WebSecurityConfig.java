@@ -67,7 +67,12 @@ public class WebSecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Add CORS configuration here
             .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(request -> request
-                .requestMatchers("api/v1", "/auth/**").permitAll()
+                // .requestMatchers("api/v1", "/auth/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/titles").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/clients").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/books").authenticated()
+                .requestMatchers(HttpMethod.GET, "/api/v1/clients/**").permitAll()
                 .anyRequest().authenticated()
             );
 
@@ -80,8 +85,6 @@ public class WebSecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        // config.addAllowedOrigin("http://localhost:3000"); // Allow your React app origin
-        // config.addAllowedOrigin("http://localhost:3001"); // Allow your React app origin
         config.addAllowedOriginPattern("http://localhost:*");
         config.setAllowedHeaders(Arrays.asList(
             HttpHeaders.AUTHORIZATION,
