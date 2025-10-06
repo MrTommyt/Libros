@@ -7,11 +7,13 @@ import co.edu.unimagdalena.libros.libros.entity.Role;
 import co.edu.unimagdalena.libros.libros.repository.ClientRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,12 +26,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
-    public UserDetailsServiceImpl(ClientRepository clientRepository, PasswordEncoder passwordEncoder) {
+    public UserDetailsServiceImpl(ClientRepository clientRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.clientRepository = clientRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Client> clientOptional = clientRepository.findByEmail(email);
         if (clientOptional.isEmpty()) throw new UsernameNotFoundException("[ERROR]: is Empty");
@@ -39,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserInfoDto addUser(UserInfoDto userInfo) {
         Client client = new Client(
                 null,
-                userInfo.name(),
+                userInfo.username(),
                 null,
                 userInfo.email(),
                 passwordEncoder.encode(userInfo.password()),
