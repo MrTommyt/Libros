@@ -3,7 +3,7 @@ package co.edu.unimagdalena.libros.libros.config;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import co.edu.unimagdalena.libros.libros.service.imp.BookDefinitionSyncService;
+import co.edu.unimagdalena.libros.libros.service.BookDefinitionSyncService;
 
 @Component
 @RequiredArgsConstructor

@@ -19,4 +19,8 @@ public interface BookService {
     void deleteBookById(UUID id);
     BookDto updateBook(BookDto bookDto);
 
+    List<BookDto> findBooksByClientId(UUID MyClientId);
+    List<BookDto> findBooksFromOthers(UUID clientId);
+    List<BookDto> findAllPublicBooks();
+
 }
