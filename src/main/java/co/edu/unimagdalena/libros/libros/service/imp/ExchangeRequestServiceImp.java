@@ -68,54 +68,35 @@ public class ExchangeRequestServiceImp implements ExchangeRequestService {
     }
 
     @Override
+    @Transactional
     public ExchangeRequestDto updateExchangeRequest(UUID id, ExchangeRequestStatus newStatus) {
-        ExchangeRequest request = exchangeRequestRespository.findByid(id).orElseThrow();
-
-        request.setStatus(newStatus);
-
-        return exchangeRequestMapper.toDto(exchangeRequestRespository.save(request));
-
+        if (newStatus == ExchangeRequestStatus.COMPLETED) {
+            return CompleteExchangeRequest(id);
+        }
+        ExchangeRequest req = exchangeRequestRespository.findById(id).orElseThrow();
+        req.setStatus(newStatus);
+        return exchangeRequestMapper.toDto(exchangeRequestRespository.save(req));
     }
-
-    private static final Logger log = LoggerFactory.getLogger(ExchangeRequestServiceImp.class);
 
     @Override
     @Transactional
     public ExchangeRequestDto CompleteExchangeRequest(UUID requestId) {
-        ExchangeRequest request = exchangeRequestRespository.findByid(requestId)
+        ExchangeRequest request = exchangeRequestRespository.findById(requestId)
                 .orElseThrow(() -> new BookNotFoundException("Request not found"));
 
-        Book bookRequested = bookRepository.findById(request.getBookRequested().getId()).orElseThrow(() -> new BookNotFoundException("Libro no encontrado"));
-        Book bookOffered = bookRepository.findById(request.getBookOffered().getId()).orElseThrow(() -> new BookNotFoundException("Libro no encontrado"));
+        Book bookRequested = bookRepository.findById(request.getBookRequested().getId())
+                .orElseThrow(() -> new BookNotFoundException("Libro no encontrado"));
+        Book bookOffered = bookRepository.findById(request.getBookOffered().getId())
+                .orElseThrow(() -> new BookNotFoundException("Libro no encontrado"));
 
-
-        log.info("Antes: bookRequested id={}, stateRequest={}", bookRequested.getId(), bookRequested.getStateRequest());
-        log.info("Antes: bookOffered id={}, stateRequest={}", bookOffered.getId(), bookOffered.getStateRequest());
-
-        // Cambia el estado
         bookRequested.setStateRequest("EXCHANGED");
         bookOffered.setStateRequest("EXCHANGED");
-
-        // Guarda ambos libros
-        Book updatedRequested = bookRepository.save(bookRequested);
-        Book updatedOffered = bookRepository.save(bookOffered);
-
-        log.info("Después: bookRequested id={}, stateRequest={}", updatedRequested.getId(), updatedRequested.getStateRequest());
-        log.info("Después: bookOffered id={}, stateRequest={}", updatedOffered.getId(), updatedOffered.getStateRequest());
-
-        request.setBookRequested(updatedRequested);
-        request.setBookOffered(updatedOffered);
+        bookRepository.saveAll(java.util.List.of(bookRequested, bookOffered));
 
         request.setStatus(ExchangeRequestStatus.COMPLETED);
+        ExchangeRequest saved = exchangeRequestRespository.save(request);
 
-        ExchangeRequest savedRequest = exchangeRequestRespository.save(request);
-
-
-        // entityManager.flush();
-
-        return exchangeRequestMapper.toDto(savedRequest);
+        return exchangeRequestMapper.toDto(saved);
     }
-
-
 
 }
