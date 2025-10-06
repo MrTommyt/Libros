@@ -4,6 +4,8 @@ import co.edu.unimagdalena.libros.libros.dto.BookDto;
 import co.edu.unimagdalena.libros.libros.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +18,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
     private final BookService bookService;
+    private static final Logger log = LoggerFactory.getLogger(BookDefinitionController.class);
     
     @GetMapping()
     public ResponseEntity<List<BookDto>> getAllBooks() {
@@ -24,6 +27,7 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable("id") UUID id){
+        log.info("Consultando libros...");
         return ResponseEntity.ok(bookService.getBookById(id));
     }
 
