@@ -1,6 +1,7 @@
 package co.edu.unimagdalena.libros.libros.controller;
 
 
+import co.edu.unimagdalena.libros.libros.config.JwtUtil;
 import co.edu.unimagdalena.libros.libros.dto.BookDto;
 import co.edu.unimagdalena.libros.libros.dto.ClientDto;
 import co.edu.unimagdalena.libros.libros.dto.CreateExchangeRequestDto;
@@ -37,7 +38,7 @@ public class ExchangeRequestController {
     @Autowired
     private ClientMapper clientMapper ;
     @Autowired
-    private JwtService jwtService; // Tu servicio para extraer datos de JWT
+    private JwtUtil jwtUtil; // Tu servicio para extraer datos de JWT
 
     @PostMapping
     public ResponseEntity<ExchangeRequestDto> createExchange(
@@ -45,7 +46,7 @@ public class ExchangeRequestController {
             @RequestHeader("Authorization") String authorizationHeader
     )  {
         String token = authorizationHeader.substring("Bearer ".length());
-        UUID fromUserId = jwtService.extractClientId(token);
+        UUID fromUserId = jwtUtil.getIdFromJwtToken(token);
 
         BookDto bookOffered = bookMapper.toDto(bookRepository.findById(dto.getBookOfferedId()).orElseThrow());
         BookDto bookRequested = bookMapper.toDto(bookRepository.findById(dto.getBookRequestId()).orElseThrow());
@@ -75,7 +76,7 @@ public class ExchangeRequestController {
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         String token = authorizationHeader.substring("Bearer ".length());
-        UUID userId = jwtService.extractClientId(token);
+        UUID userId = jwtUtil.getIdFromJwtToken(token);
         return ResponseEntity.ok(exchangeRequestServiceImp.getSentExchangeRequest(userId));
     }
 
@@ -84,7 +85,7 @@ public class ExchangeRequestController {
             @RequestHeader("Authorization") String authorizationHeader
     ) {
         String token = authorizationHeader.substring("Bearer ".length());
-        UUID userId = jwtService.extractClientId(token);
+        UUID userId = jwtUtil.getIdFromJwtToken(token);
         return ResponseEntity.ok(exchangeRequestServiceImp.getRecivedExchangeRequests(userId));
     }
 
