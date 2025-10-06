@@ -41,7 +41,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "9091:9090"
+      - "9090:9090"
     networks:
       - app-network
     restart: unless-stopped
@@ -53,9 +53,13 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+      - zipkin
+      - loki
     networks:
       - app-network
     restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
 
   zipkin:
     image: openzipkin/zipkin
