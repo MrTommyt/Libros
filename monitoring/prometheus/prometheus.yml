@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: 'spring-app'
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ['app-server:8080']
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'loki'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['loki:3100']
+
+  - job_name: 'zipkin'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['zipkin:9411']
