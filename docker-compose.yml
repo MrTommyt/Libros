@@ -64,7 +64,7 @@ services:
       - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
       - grafana_data:/var/lib/grafana
     ports:
-      - "3000:3000"
+      - "3000:3010"
     depends_on:
       - prometheus
       - loki
